@@ -3,7 +3,7 @@ A library to make easier some simple requests to stripe.
 
 GETTING STARTED:
 First of all you'll need to provide the private or the public keys of your API depending on whether you'll be using it in server or browser respectively.
-To initialize those parameters, you'll have to use the init() function.
+To initialize that parameter, you'll have to use the init() function.
 
 {
 
@@ -13,4 +13,4 @@ To initialize those parameters, you'll have to use the init() function.
 
 }
 
-If you don't initialize this parameters you won't be able to use any of the lib functions.
+If you don't initialize this parameter you won't be able to use any of the lib functions.
