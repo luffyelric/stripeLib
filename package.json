@@ -2,7 +2,7 @@
   "name": "stripeLib",
   "version": "1.0.0",
   "description": "Stripe Lib",
-  "main": "lib/index.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/luffyelric/stripeLib"
