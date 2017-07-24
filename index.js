@@ -1,4 +1,4 @@
-const stripe = require("stripe")(config.API_USAGE_KEY);
+var stripe;
 
 var config = {
     initialized: false,
@@ -9,6 +9,7 @@ exports.init = function(APIkey){
     if(!APIkey) throw new Error('Please provide an APIkey');
     config.API_USAGE_KEY = APIkey;
     config.initialized = true;
+    stripe = require("stripe")(config.API_USAGE_KEY);
 }
 
 exports.getCustomer = async function(customerId){
@@ -63,7 +64,7 @@ exports.createCustomer = async function(email){
     return customer;
 }
 
-exports.createCustomerWithCard = async function(cardToken, email){
+exports.createCustomerWithCard = async function(email, cardToken){
     if(!config.initialized) throw new Error('You must first initialize the API key that you will be using for stripe');
 
     const customer = await stripe.customers.create({
@@ -82,11 +83,19 @@ exports.addCardToCustomer = async function(customerId, cardToken){
     return;
 }
 
+exports.updateDefaultCard = async function(customerId, cardId){
+    if(!config.initialized) throw new Error('You must first initialize the API key that you will be using for stripe');
+
+    const customer = await stripe.customers.update(customerId, {default_source: cardId});
+    if(!customer) throw new Error("The default_source could not be modified");
+    return customer;
+}
+
 exports.cardCharge = async function(token, total, curr){
     if(!config.initialized) throw new Error('You must first initialize the API key that you will be using for stripe');
 
     const charge = await stripe.charges.create({
-        amount: total,
+        amount: total*100,
         currency: curr,
         source: token
     });
@@ -98,7 +107,7 @@ exports.chargeInfo = async function(chargeId){
     if(!config.initialized) throw new Error('You must first initialize the API key that you will be using for stripe');
 
     const charge = await stripe.charges.retrieve(chargeId);
-    if(!charge) throw new Error("The charge does not exist");
+    if(!charge) throw new Error("The charge could not be found");
     return charge;
 }
 
@@ -106,7 +115,7 @@ exports.customerCharge = async function(customerId, total, curr){
     if(!config.initialized) throw new Error('You must first initialize the API key that you will be using for stripe');
 
     const charge = await stripe.charges.create({
-        amount: total,
+        amount: total*100,
         currency: curr,
         customer: customerId
     });
@@ -127,5 +136,5 @@ exports.removeCustomer = async function(customerId){
 
     const delCustomer = await stripe.customers.del(customerId);
     if(delCustomer.deleted == true ) return;
-    else throw new Error('The customer does not exist');
+    else throw new Error('The customer could not be deleted');
 }
