@@ -95,7 +95,7 @@ exports.cardCharge = async function(token, total, curr){
     if(!config.initialized) throw new Error('You must first initialize the API key that you will be using for stripe');
 
     const charge = await stripe.charges.create({
-        amount: total*100,
+        amount: total,
         currency: curr,
         source: token
     });
@@ -115,7 +115,7 @@ exports.customerCharge = async function(customerId, total, curr){
     if(!config.initialized) throw new Error('You must first initialize the API key that you will be using for stripe');
 
     const charge = await stripe.charges.create({
-        amount: total*100,
+        amount: total,
         currency: curr,
         customer: customerId
     });
