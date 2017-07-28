@@ -17,7 +17,7 @@ describe("StripeLib tests", () => {
 
   it("should complain about initializing without an API key", async () => {
     try{
-      await stripeLib.init();
+      await stripeLib.init({});
     }
     catch(err){
       expect(err+"").toEqual('Error: Please provide an APIkey')
@@ -25,7 +25,7 @@ describe("StripeLib tests", () => {
   });
 
   it("should initialize api key and let create a customer", async () => {
-    await stripeLib.init("sk_test_32SF4oBMGK82jfOdaTf38dsj");
+    await stripeLib.init({apiKey: "sk_test_32SF4oBMGK82jfOdaTf38dsj"});
 
     const response = await stripeLib.createCustomer("sdjkabsdasda@asjfblasa.com");
 
@@ -43,11 +43,27 @@ describe("StripeLib tests", () => {
     }
   });
 
-  it("should create a new token", async () => {
-    const response = await stripeLib.createToken({
+  it("should complain about not having the publishable key", async () => {
+    try{
+      const response = await stripeLib.createTokenFromCard({
+        number: "4242424242424242",
+        month: 12,
+        year: 22,
+        cvc: 135
+      });
+    }
+    catch(err){
+      expect(err+"").toEqual("Error: Please provide a publishable API KEY")
+    }
+  });
+
+  it("should add a publishable API KEY and create a new token", async () => {
+    await stripeLib.init({publishableKey: "sk_test_32SF4oBMGK82jfOdaTf38dsj"});
+
+    const response = await stripeLib.createTokenFromCard({
       number: "4242424242424242",
-      exp_month: 12,
-      exp_year: 22,
+      month: 12,
+      year: 22,
       cvc: 135
     });
 
@@ -76,10 +92,10 @@ describe("StripeLib tests", () => {
   });
 
   it("should add a card to the customer", async () => {
-    const token = await stripeLib.createToken({
+    const token = await stripeLib.createTokenFromCard({
       number: "4012888888881881",
-      exp_month: 9,
-      exp_year: 56,
+      month: 9,
+      year: 56,
       cvc: 427
     });
 
@@ -140,10 +156,10 @@ describe("StripeLib tests", () => {
   });
 
   it("should charge a random card with 50 euros", async () => {
-    const token = await stripeLib.createToken({
+    const token = await stripeLib.createTokenFromCard({
       number: "5555555555554444",
-      exp_month: 4,
-      exp_year: 26,
+      month: 4,
+      year: 26,
       cvc: 978
     });
 

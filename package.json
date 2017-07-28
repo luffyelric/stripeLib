@@ -11,10 +11,19 @@
     "test": "npm run jasmine",
     "jasmine": "NODE_PATH=./node_modules jasmine"
   },
-  "keywords": ["stripe", "library", "node", "card", "payment", "wrapper", "api"],
+  "keywords": [
+    "stripe",
+    "library",
+    "node",
+    "card",
+    "payment",
+    "wrapper",
+    "api"
+  ],
   "author": "Joel Moreno <joel@tvrbo.pro>",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.16.2",
     "stripe": "^4.23.1"
   },
   "devDependencies": {

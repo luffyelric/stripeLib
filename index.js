@@ -1,15 +1,19 @@
 var stripe;
+var axios = require('axios');
 
 var config = {
     initialized: false,
-    API_USAGE_KEY: ''   
+    API_SECRET_KEY: '',
+    API_PUBLISHABLE_KEY: ''
 };
 
-exports.init = function(APIkey){
-    if(!APIkey) throw new Error('Please provide an APIkey');
-    config.API_USAGE_KEY = APIkey;
+exports.init = function({apiKey, publishableKey}){
+    if(!apiKey && !publishableKey) throw new Error('Please provide an APIkey');
+    config.API_PUBLISHABLE_KEY = publishableKey;
+    if(!apiKey) return;
     config.initialized = true;
-    stripe = require("stripe")(config.API_USAGE_KEY);
+    config.API_SECRET_KEY = apiKey;
+    stripe = require("stripe")(config.API_SECRET_KEY);
 }
 
 exports.getCustomer = async function(customerId){
@@ -38,20 +42,21 @@ exports.getCustomerDigestedCards = async function(customerId){
     return digestedCards;
 }
 
-exports.createToken = async function(cardData){
-    if(!config.initialized) throw new Error('You must first initialize the API key that you will be using for stripe');
-
-    const token = await stripe.tokens.create({
-        card: {
-            number: cardData.number,
-            exp_month: cardData.exp_month,
-            exp_year: cardData.exp_year,
-            cvc: cardData.cvc
-            //address_zip: cardData.address_zip  
+exports.createTokenFromCard = async function ({number, month, year, cvc}) {
+    if(!config.API_PUBLISHABLE_KEY) throw new Error("Please provide a publishable API KEY");
+    var response = await axios({
+        method: "post",
+        url: "https://api.stripe.com/v1/tokens",
+        data: `card[number]=${number}&card[exp_month]=${month}&card[exp_year]=${year}&card[cvc]=${cvc}`,
+        headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+        Authorization: "Bearer " + config.API_PUBLISHABLE_KEY
         }
-    });
-    if(!token) throw new Error("Token could not be created");
-    return token;
+    })
+    if (!response || !response.data || typeof response.data != "object")
+    throw new Error("No se puede conectar con Stripe");
+    else return response.data;
+    
 }
 
 exports.createCustomer = async function(email){
