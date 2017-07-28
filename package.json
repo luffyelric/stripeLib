@@ -1,6 +1,6 @@
 {
   "name": "stripe-lib",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Node JS library for using the most common functionalities of stripe",
   "main": "index.js",
   "repository": {
