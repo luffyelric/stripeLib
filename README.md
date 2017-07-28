@@ -39,12 +39,12 @@ LIBRARY USAGE:
     
     PAYING THROUGH A CUSTOMER'S CARD:
 
-    Creating a customer without anything
+    //Creating a customer without anything
 
     const customer = await stripelib.createCustomer("CUSTOMER'S-EMAIL");
 
-    Creating a customer with a card
-    
+    //Creating a customer with a card
+
     const customer = await stripelib.createCustomerWithCard("CUSTOMER'S-EMAIL", CARD-TOKEN-GENERATED.id);
 
     //A customer with cards has always a default one which will receive the charge when charging the customer
