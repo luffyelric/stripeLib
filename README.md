@@ -39,10 +39,12 @@ LIBRARY USAGE:
     
     PAYING THROUGH A CUSTOMER'S CARD:
 
-    //Creating a customer without anything
+    Creating a customer without anything
+
     const customer = await stripelib.createCustomer("CUSTOMER'S-EMAIL");
 
-    //Creating a customer with a card
+    Creating a customer with a card
+    
     const customer = await stripelib.createCustomerWithCard("CUSTOMER'S-EMAIL", CARD-TOKEN-GENERATED.id);
 
     //A customer with cards has always a default one which will receive the charge when charging the customer
@@ -61,7 +63,7 @@ LIBRARY USAGE:
     const digestedCardsInfo = await stripelib.getCustomerDigestedCards(customer.id);
 
 
-    //Charging the customer
+    Charging the customer
     //A customer can't pay if it has no cards
 
     const charge = await stripelib.customerCharge(
@@ -80,18 +82,20 @@ LIBRARY USAGE:
     const chargeInfo = await stripelib.chargeInfo(charge.id);
 
 
-    //REMOVING
+    REMOVING
 
-    //Remove a card from a customer:
+    Remove a card from a customer:
+
     await stripelib.removeCardFromCustomer(customer.id, card.id);
 
-    //Remove a customer:
+    Remove a customer:
+
     await stripelib.removeCustomer(customer.id);
 
 
 
-    //TESTS
-    //If on your own decide to make some changes over the code of the functions but want the output to keep it like right now you can alway run the verification output tests using:
+    TESTS
+    If on your own decide to make some changes over the code of the functions but want the output to keep it like right now you can alway run the verification output tests using:
 
     npm run jasmine
 
