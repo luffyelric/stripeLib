@@ -192,7 +192,7 @@ await stripelib.removeCustomer(customer.id);
 ```
 
 
-##Tests
+## Tests
 
 If on your own decide to make some changes over the code of the functions but want the output to keep it like right now you can alway run the verification output tests using:
 
